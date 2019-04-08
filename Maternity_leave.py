@@ -20,12 +20,24 @@ def main(start_date):
     small_month=[4,6,9,11]
     start_month=str(start_date).split(".")[0] #获取请假开始月份，比如5.14，那么开始月份就是5月
     start_month=int(start_month)
+    if start_month > 12:
+        print("pelase input right moth(<=12)")
+        exit(1)
     if start_month in small_month and small_month != 1:
-        rest_day=30 - start_day
+        if start_day > 30:
+            print("%d is small month and please input right day( <=30)" %(start_month))
+            exit(1)
+        rest_day=30 - start_day + 1 #小月当月剩余天数（含请假当天）
     elif start_month==2:
-        rest_day=28 - start_day
+        if start_day > 28:
+            print("%d is Febrary and please input right day( <=28)" %(start_month))
+            exit(1)
+        rest_day=28 - start_day + 1 #2月当月剩余天数（含请假当天）
     else:
-            rest_day=31 -start_day
+        if start_day > 31:
+            print("%d is big month and please input right day( <=31)" %(start_month))
+            exit(1)
+        rest_day=31 -start_day + 1 #大月当月剩余天数（含请假当天）
     if rest_day < 0:
         print("please input right start day")
         exit (1)

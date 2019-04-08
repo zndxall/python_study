@@ -5,17 +5,21 @@ total_days=`expr 98 + 80`
 #total_days=`expr 98 + 80 + 30`
 cur_year=`date "+%Y"`
 echo start day: $cur_year.$1 and total days:$total_days
+start_month=`echo $1 |awk -F "." '{print $1}'`
+[ $start_month -gt 12 ] && echo "please input right month (<=12)" && exit 1
 start_day=`echo $1 |awk -F "." '{print $2}'`
 small_month="4 6 9 11"
-start_month=`echo $1 |awk -F "." '{print $1}'`
 fit_cur_month=`echo $small_month |grep $start_month`
 if [ "x$fit_cur_month" != "x" -a "$start_month" != "1" ];then
-        rest_day=`expr 30 - $start_day ` #当月剩余的天数(小月)
+	[ $start_day -gt 30 ] && echo "$start_month is small month and please input right day( <=30)" && exit 1
+        rest_day=`expr 30 - $start_day + 1 ` #小月当月剩余的天数(含请假当天)
 else
     if [ "$start_month" == "2" ];then
-        rest_day=`expr 28 - $start_day ` #当月剩余的天数(2月)
+	[ $start_day -gt 28 ] && echo "$start_month is February and please input right day( <=28)" && exit 1
+        rest_day=`expr 28 - $start_day + 1` #2月当月剩余的天数(含请假当天)
     else
-	rest_day=`expr 31 - $start_day ` #当月剩余的天数(大月)
+	[ $start_day -gt 31 ] && echo "$start_month is big month and please input right day( <=31)" && exit 1
+	rest_day=`expr 31 - $start_day + 1  ` #大月当月剩余的天数(含请假当天)
     fi
 fi
 [ $rest_day -lt 0 ] && echo please input right start day && exit 1
