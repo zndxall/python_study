@@ -10,15 +10,25 @@
 
 import sys
 import time
+from tkinter import *
+#import tkinter as tk
 
-def main(start_date):
-    total_days=98 +80
-    cur_year=time.strftime("%Y",time.localtime(time.time()))
-    print("start_day:",cur_year,start_date,"total days:",total_days)
-    start_day=str(start_date).split(".")[-1] #获取请假开始日期，比如5.14，那么开始日期就是14号
+def main():
+    start_date=e1.get() # e1.get()是字符串，此处不能强制转换为int类型
+    total_days=e3.get()
+    total_days=int(total_days)
+    if total_days != 178 and total_days !=208:
+        print("请输入正确的休假天数")
+        exit(1)
+    #total_days=98 +80
+    #cur_year=time.strftime("%Y",time.localtime(time.time()))
+    cur_year=start_date.split(".")[0]
+    cur_year=int(cur_year)
+    print("start_day:",start_date,"total days:",total_days)
+    start_day=start_date.split(".")[-1] #获取请假开始日期，比如5.14，那么开始日期就是14号
     start_day=int(start_day)
     small_month=[4,6,9,11]
-    start_month=str(start_date).split(".")[0] #获取请假开始月份，比如5.14，那么开始月份就是5月
+    start_month=start_date.split(".")[1] #获取请假开始月份，比如5.14，那么开始月份就是5月
     start_month=int(start_month)
     if start_month > 12:
         print("pelase input right moth(<=12)")
@@ -71,7 +81,27 @@ def main(start_date):
         lastest_month=lastest_month%12
         cur_year=cur_year+1
     print("end day:",cur_year,"年",lastest_month,"月",days_n)
+    Label(top, text="结束日期").grid(row=1, column=0)
+    Entry(top, textvariable=v2).grid(row=1, column=1, padx=10, pady=5)  # 用于储存 输入的内容并进行表格式布局
+    v2.set(days_n)
+    v2.set(str(cur_year)+"."+str(lastest_month)+"."+str(days_n))
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    top=Tk()
+    top.title("产假计算器")
+    Label(top,text="开始日期(格式:年.月.日)").grid(row=0,column=0)
+    Label(top, text="请假天数").grid(row=2, column=0)
+    Label(top, text="说明：未考虑闰年，基础产假98天+广东省增加产假80天，如遇难产/剖腹产增加30天,所以休假天数只能是178或者208").grid(row=3,column=1,padx=3)
+    v1 = StringVar()  # 用于请假开始日期
+    v2 = StringVar()   # 用于请假结束日期
+    v3 = StringVar()   # 用于请假天数
+    v4 = StringVar()  # 用于设置出错信息
+    e1 = Entry(top, textvariable=v1)  # 用于储存 输入的内容
+    e1.grid(row=0, column=1, padx=10, pady=5)  # 进行表格式布局
+    e3 = Entry(top, textvariable=v3)  # 用于储存 输入的内容
+    e3.grid(row=2, column=1, padx=10, pady=5)  # 进行表格式布局
+    Button(top, text='计算结束日期', command=main).grid(row=4,column=0)  # 点击按钮执行的命令
+    Button(top, text='Quit', command=top.quit).grid(row=4, column=1)
+    top.mainloop()
+    #main(sys.argv[1])
     #main(5.14)
