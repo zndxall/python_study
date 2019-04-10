@@ -1,4 +1,4 @@
-#!/usr/bin/env py```thon
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 """
 (多行注释使用三个英文的双引号)
