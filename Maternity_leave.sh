@@ -29,7 +29,7 @@ do
 	next_month=`expr $start_month + $months`
 	[ $next_month -gt 12 ] && next_month=$(($next_month % 12 )) #跨年了
 	fit_small_month=`echo $small_month | grep $next_month`
-	if [ "x$fit_small_month" != "x" ];then #30天的小月
+	if [ "x$fit_small_month" != "x"  -a "$next_month" != "1" ];then #30天的小月
 	    days=`expr $days + 30`
 	else
 	    if [ "$next_month" == "2" ]; then
@@ -38,12 +38,14 @@ do
 	        days=`expr $days + 31` #31天的大月
             fi
 	fi
+	#echo $next_month days=$days
 done
 echo $start_month month rest days: $rest_day and next five months days:$days
 days_n=`expr $total_days - $rest_day - $days` #最后一个月还可以请的天数
 if [ $days_n -le 0 ];then #最后一个天数小于等于0
     echo "$days_n < = 0 "
     lastest_month=`expr $start_month + 5` #最后一个月的月份
+    [ $lastest_month -gt 12 ] && lastest_month=$(($lastest_month % 12 )) && cur_year=`expr $cur_year + 1` #跨年了
     fit_last_month=`echo $small_month |grep $lastest_month`
     #因为days_n是负数了，所以要使用加
      if [ "x$fit_last_month" != "x" -a "$lastest_month" != "1" ];then
@@ -57,7 +59,7 @@ if [ $days_n -le 0 ];then #最后一个天数小于等于0
     fi
 else
     lastest_month=`expr $start_month + 6` #最后一个月的月份
+    [ $lastest_month -gt 12 ] && lastest_month=$(($lastest_month % 12 )) && cur_year=`expr $cur_year + 1` #跨年了
 fi
-[ $lastest_month -gt 12 ] && lastest_month=$(($lastest_month % 12 )) && cur_year=`expr $cur_year + 1` #跨年了
 echo end day: $cur_year.$lastest_month.$days_n
 
