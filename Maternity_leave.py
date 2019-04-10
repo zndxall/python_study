@@ -37,9 +37,7 @@ def main():
             exit(1)
     else:
         print("ok")
-    big_year_flag = 0  # 平年
-    if cur_year % 4 == 0 and cur_year % 100 != 0:
-        big_year_flag = 1  # 闰年，2月有29天，比如2004年
+
     print("start_day:", start_date, "total days:", total_days)
     try:
         start_day = start_date.split(".")[-1]  # 获取请假开始日期，比如5.14，那么开始日期就是14号
@@ -56,6 +54,10 @@ def main():
     small_month = [4, 6, 9, 11]
     start_month = start_date.split(".")[1]  # 获取请假开始月份，比如5.14，那么开始月份就是5月
     start_month = int(start_month)
+    big_year_flag = 0  # 平年
+    if start_month < 3:  # 当年请假开始月份在3月之前才需要考虑是否2月是闰月
+        if cur_year % 4 == 0 and cur_year % 100 != 0:
+            big_year_flag = 1  # 闰年，2月有29天，比如2004年
     if start_month > 12:
         tkinter.messagebox.showerror('报错', '请输入正确的月份（小于等于12）')
         exit(1)
@@ -90,11 +92,15 @@ def main():
         next_month = start_month+month
         if next_month >= 12:  # 跨年了
             next_month = next_month % 12
+            next_year_big = 0
+            next_year = cur_year + 1
+            if next_year % 4 == 0 and next_year % 100 != 0:
+                next_year_big = 1
         if next_month in small_month:  # 30天的小月
             days = days + 30
         else:
             if next_month == 2:  # 2月
-                if big_year_flag == 1:  # 闰年
+                if big_year_flag == 1 or next_year_big == 1:  # 当年是闰年（比如2004年1月开始请假）或者下一年是闰年（比如2003年12月开始请假）
                     days = days + 29
                 else:
                     days = days + 28
@@ -104,11 +110,15 @@ def main():
     days_n = total_days - rest_day - days  # 最后一个月还可以请的天数
     if days_n <= 0:  # 最后一个月天数小于等于0
         lastest_month = start_month + 5
+        if lastest_month > 12:  # 跨年了
+            lastest_month = lastest_month % 12
+            cur_year = cur_year + 1
         if lastest_month in small_month and lastest_month != 1:
             days_n = 30 + days_n
         else:
-            if lastest_month == 2:
-                if big_year_flag == 1:
+            print("lastest_month:",lastest_month)
+            if lastest_month == 2:  # 最后一个月是2月，同时请5个月以上，一般涉及跨年
+                if next_year_big == 1:
                     days_n = 29 + days_n   # 闰年
                 else:
                     days_n = 28 + days_n
@@ -116,9 +126,9 @@ def main():
                 days_n = 31 + days_n
     else:
         lastest_month = start_month + 6
-    if lastest_month > 12:  # 跨年了
-        lastest_month = lastest_month % 12
-        cur_year = cur_year + 1
+        if lastest_month > 12:  # 跨年了
+            lastest_month = lastest_month % 12
+            cur_year = cur_year + 1
     print("end day:", cur_year, "年", lastest_month, "月", days_n)
     Label(top, text="结束日期").grid(row=1, column=0)
     Entry(top, textvariable=v2).grid(row=1, column=1, padx=10, pady=5)  # 用于储存 输入的内容并进行表格式布局
