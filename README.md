@@ -6,3 +6,4 @@
 * (4)[opp](opp/opp_summary.md) -----面向对象练习汇总
 * (5) [process_thread](process_thread/process_thread_summary.md) ----进程线程练习汇总
 * (6) [reptile](reptile/reptile_summary.md) -----简易网络爬虫练习汇总
+* (7) [doc](doc/doc.md) ------python资料文档
