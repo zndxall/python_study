@@ -21,13 +21,13 @@ def main():
         exit(1)
     total_days = e3.get()
     total_days = int(total_days)
-    if total_days != 178 and total_days !=208:
+    if total_days != 178 and total_days != 208:
         tkinter.messagebox.showerror('报错', '请输入正确的休假天数')
         exit(1)
     # total_days=98 +80
     # cur_year=time.strftime("%Y",time.localtime(time.time()))
     try:
-        cur_year = start_date.split(".")[0]
+        cur_year = start_date.split(".", 2)[0]  # 分割两次，分割成三段，取第一段，比如2019.9.12，分割成“2019，9，12”
         cur_year = int(cur_year)
     except:
         if isinstance(cur_year, int):  # 判断是不是int类型
@@ -40,7 +40,7 @@ def main():
 
     print("start_day:", start_date, "total days:", total_days)
     try:
-        start_day = start_date.split(".")[-1]  # 获取请假开始日期，比如5.14，那么开始日期就是14号
+        start_day = start_date.split(".", 2)[2]  # 获取请假开始日期，比如5.14，那么开始日期就是14号
         start_day = int(start_day)
     except :
         if isinstance(start_day, int):  # 判断是不是int类型
@@ -52,7 +52,7 @@ def main():
         print("ok")
 
     small_month = [4, 6, 9, 11]
-    start_month = start_date.split(".")[1]  # 获取请假开始月份，比如5.14，那么开始月份就是5月
+    start_month = start_date.split(".", 2)[1]  # 获取请假开始月份，比如5.14，那么开始月份就是5月
     start_month = int(start_month)
     big_year_flag = 0  # 平年
     if start_month < 3:  # 当年请假开始月份在3月之前才需要考虑是否2月是闰月
