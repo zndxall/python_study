@@ -26,6 +26,7 @@ def main():
         exit(1)
     # total_days=98 +80
     # cur_year=time.strftime("%Y",time.localtime(time.time()))
+    # cur_year, start_month, start_day = start_date.split(".", 2)  # 分割两次，分割成三段，取第一段，比如2019.9.12，分割成“2019，9，12”，分别获取年月日
     try:
         cur_year = start_date.split(".", 2)[0]  # 分割两次，分割成三段，取第一段，比如2019.9.12，分割成“2019，9，12”
         cur_year = int(cur_year)
